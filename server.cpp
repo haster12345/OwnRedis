@@ -36,20 +36,20 @@ int main(void)
     }
 
     int val = 1;
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)); // socket options
 
     // bind
-    struct sockaddr_in addr = {};
-    addr.sin_family = AF_INET;
-    addr.sin_port = ntohs(1234);
+    struct sockaddr_in addr = {};   // initalising the sockaddr_in struct and setting all members of the structs to zero
+    addr.sin_family = AF_INET;  // IPv4
+    addr.sin_port = ntohs(1234);    // convert numbers to big endian
     addr.sin_addr.s_addr = ntohl(0);    // wildcard address 0.0.0.0
-    int rv = bind(fd, (const sockaddr *)&addr, sizeof(addr));
+    int rv = bind(fd, (const sockaddr *)&addr, sizeof(addr));   // configure listening address of a socket
     if (rv) {
         die("bind()");
     }
 
-    //listen
-    rv = listen(fd, SOMAXCONN);
+    // Make the socket a listening socket
+    rv = listen(fd, SOMAXCONN); // automaticcally handle TCP handshakes and place established connection in a queue
     if (rv) {
         die("listen()");
     }
